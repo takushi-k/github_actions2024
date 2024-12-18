@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # 日本時間で毎晩 21 時    ●+9 なので、21時っぽい
+    #- cron: '0 12 * * *'
 
 defaults:
   run:
@@ -20,6 +23,10 @@ jobs:
       - run: npm ci
       - run: npm run test -- --coverage
       - run: npm run build
+
+      - run: node dist/index.js &
+      - run: npx wait-on -t 10000 http://localhost:8080/api/health
+      - run: npm run test:api
       
       - uses: actions/upload-artifact@v3
         if: always()
