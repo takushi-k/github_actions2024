@@ -45,7 +45,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - run: ls -l dist/
+      # - run: ls -l dist/
       - uses: actions/download-artifact@v3
         with:
           name: dist
