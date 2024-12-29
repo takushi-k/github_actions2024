@@ -9,13 +9,19 @@ defaults:
   run:
     working-directory: frontend
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - run: aws --version
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::782575531486:role/udemy-github-actions-frontend-deployment-role3
+          aws-region: ap-northeast-1
       - run: aws s3 sync . s3://udemy-github-actions-s3-takushi --exact-timestamps --region ap-northeast-1
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.FRONTEND_AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.FRONTEND_AWS_SECRET_ACCESS_KEY }}
+
